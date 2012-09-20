@@ -58,7 +58,7 @@ $(window).load(function(){
 // 	$('#log').text('playNote('+n+')');
 // 	playNote(n);
 // },500);
-	var speed = 12;
+	var speed = 4;
 	var stopped=false;
 	var anim = new Kinetic.Animation({
 	  func: function(frame) {
@@ -77,12 +77,9 @@ $(window).load(function(){
 	});
 	  anim.start();
 });
-//hsv to RGB http://www.cs.rit.edu/~ncs/color/t_convert.html
-function hsvToRgb(h, s, v) {var a,b,c,d,e,f,g,i,k;s/=100;v/=100;0==s&&(a=b=c=v,k=[Math.round(255*a),Math.round(255*b),Math.round(255*c)]);h/=60;d=Math.floor(h);e=h-d;f=v*(1-s);g=v*(1-s*e);i=v*(1-s*(1-e));switch(d){case 0:a=v;b=i;c=f;break;case 1:a=g;b=v;c=f;break;case 2:a=f;b=v;c=i;break;case 3:a=f;b=g;c=v;break;case 4:a=i;b=f;c=v;break;default:a=v,b=f,c=g}k =[Math.round(255*a),Math.round(255*b),Math.round(255*c)];return k;}
 function midiNoteToColor(num){
-	var h = 360-(Math.ceil(Math.abs(11-num%12)*(360/11)));
-	var c =hsvToRgb(h,100,100);
-	return 'rgb('+c[0]+','+c[1]+','+c[2]+')';}
+	return 'hsl('+(360-(Math.ceil(Math.abs(11-num%12)*(360/11))))+',60%,35%)';
+}
 function translatePitchToY(num,amin,amax,bmin,bmax){ 
 	return bmin + (Math.ceil(Math.abs(amax-num)*(bmax/amax)));
 }
@@ -162,3 +159,4 @@ Stage.prototype.playNote = function(midi_note){
 	note = new Note(midi_note,this.stage,this.layer);
 	this.notes.push(note);
 }
+
