@@ -31,7 +31,7 @@ $(document).bind('keypress',function(e){
 
 $(window).load(function(){
 
-  synth = new Tone.Synth().toDestination();
+  synth = new Tone.PolySynth(Tone.Synth).toDestination();
   _stage = new Stage('container');
 
 
@@ -57,7 +57,9 @@ $(window).load(function(){
 });
 
 function midiNoteToColor(num){
-  return 'hsl('+(360-(Math.ceil(Math.abs(11-num%12)*(360/11))))+',60%,35%)';
+  console.log('-', ((num-69)*30)%360)
+
+  return 'hsl('+(360-(Math.ceil(Math.abs(11-num%12)*(360/12))))+',60%,35%)';
 }
 
 function translatePitchToY(num,amin,amax,bmin,bmax){ 
@@ -67,6 +69,7 @@ function translatePitchToY(num,amin,amax,bmin,bmax){
 Note = function(midi_note, stage, layer){
   var that = this;
   this.midi_note      = midi_note;
+  console.log(midiNoteToColor(midi_note))
   this.circle     = new Konva.Circle({
     x:0,
     y:translatePitchToY(midi_note,0,127,0,$(document).height()),
@@ -79,7 +82,7 @@ Note = function(midi_note, stage, layer){
       this.circle
     )
   );
-
+  console.log(noteToFreq(midi_note))
   synth.triggerAttackRelease(noteToFreq(midi_note), "8n");
 }
 
@@ -94,6 +97,7 @@ Stage = function(container, s_context){
 }
 
 Stage.prototype.playNote = function(midi_note){
+  console.log(midi_note)
   note = new Note(midi_note, this.stage, this.layer);
   this.notes.push(note);
 }
